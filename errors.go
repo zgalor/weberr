@@ -18,6 +18,7 @@ package weberr
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/pkg/errors"
 )
@@ -27,15 +28,16 @@ type ErrorType uint
 
 const (
 	// NoType error - HTTP internal Error - code 500
-	NoType ErrorType = iota
+	NoType ErrorType = http.StatusInternalServerError
 	// BadRequest error - Code 400
-	BadRequest
+	BadRequest ErrorType = http.StatusBadRequest
 	// NotFound error - Code 404
-	NotFound
+	NotFound ErrorType = http.StatusNotFound
 	// Unauthorized error - Code 401
-	Unauthorized
+	Unauthorized ErrorType = http.StatusUnauthorized
 	// Conflict - Code 409
-	Conflict
+	Conflict ErrorType = http.StatusConflict
+	// ...
 )
 
 // customError wraps an error with type and user message
