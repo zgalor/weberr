@@ -19,3 +19,7 @@ Package weberr based on https://github.com/pkg/errors with a few additions:
 ## License
 
 BSD-2-Clause
+
+## Logo
+
+[ awesome logo image by [gophers...](https://github.com/egonelbre/gophers) ]
