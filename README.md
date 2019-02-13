@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/zgalor/weberr/master/img/weberrr-logo.png" alt="weberr logo">
+  <img src="https://raw.githubusercontent.com/zgalor/weberr/master/img/weberr-logo.png" alt="weberr logo">
 </p>
 
 # weberr
