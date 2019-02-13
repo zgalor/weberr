@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/zgalor/weberr/master/image/weberrr-logo.png" alt="weberr logo">
+</p>
+
 # weberr
 Package weberr based on https://github.com/pkg/errors with a few additions:
 * Set an error type that corresponds to HTTP status returned by this error
