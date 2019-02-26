@@ -11,17 +11,90 @@ import (
 type ErrorType uint
 
 const (
-	// NoType error - HTTP internal Error - code 500
+	// NoType error - Default placeholder for un-typed errors
 	NoType ErrorType = http.StatusInternalServerError
+
+	// 4xx Client errors
+	// -----------------
 	// BadRequest error - Code 400
 	BadRequest ErrorType = http.StatusBadRequest
-	// NotFound error - Code 404
-	NotFound ErrorType = http.StatusNotFound
 	// Unauthorized error - Code 401
 	Unauthorized ErrorType = http.StatusUnauthorized
-	// Conflict - Code 409
+	// PaymentRequired error - Code 402
+	PaymentRequired ErrorType = http.StatusPaymentRequired
+	// Forbidden error - Code 403
+	Forbidden ErrorType = http.StatusForbidden
+	// NotFound error - Code 404
+	NotFound ErrorType = http.StatusNotFound
+	// MethodNotAllowed error - Code 405
+	MethodNotAllowed ErrorType = http.StatusMethodNotAllowed
+	// NotAcceptable error - Code 406
+	NotAcceptable ErrorType = http.StatusNotAcceptable
+	// ProxyAuthRequired error - Code 407
+	ProxyAuthRequired ErrorType = http.StatusProxyAuthRequired
+	// RequestTimeout error - Code 408
+	RequestTimeout ErrorType = http.StatusRequestTimeout
+	// Conflict error - Code 409
 	Conflict ErrorType = http.StatusConflict
-	// ...
+	// Gone error - Code 410
+	Gone ErrorType = http.StatusGone
+	// LengthRequired error - Code 411
+	LengthRequired ErrorType = http.StatusLengthRequired
+	// PreconditionFailed error - Code 412
+	PreconditionFailed ErrorType = http.StatusPreconditionFailed
+	// RequestEntityTooLarge error - Code 413
+	RequestEntityTooLarge ErrorType = http.StatusRequestEntityTooLarge
+	// RequestURITooLong error - Code 414
+	RequestURITooLong ErrorType = http.StatusRequestURITooLong
+	// UnsupportedMediaType error - Code 415
+	UnsupportedMediaType ErrorType = http.StatusUnsupportedMediaType
+	// RequestedRangeNotSatisfiable error - Code 416
+	RequestedRangeNotSatisfiable ErrorType = http.StatusRequestedRangeNotSatisfiable
+	// ExpectationFailed error - Code 417
+	ExpectationFailed ErrorType = http.StatusExpectationFailed
+	// Teapot error - Code 418
+	Teapot ErrorType = http.StatusTeapot
+	// UnprocessableEntity error - Code 422
+	UnprocessableEntity ErrorType = http.StatusUnprocessableEntity
+	// Locked error - Code 423
+	Locked ErrorType = http.StatusLocked
+	// FailedDependency error - Code 424
+	FailedDependency ErrorType = http.StatusFailedDependency
+	// UpgradeRequired error - Code 426
+	UpgradeRequired ErrorType = http.StatusUpgradeRequired
+	// PreconditionRequired error - Code 428
+	PreconditionRequired ErrorType = http.StatusPreconditionRequired
+	// TooManyRequests error - Code 429
+	TooManyRequests ErrorType = http.StatusTooManyRequests
+	// RequestHeaderFieldsTooLarge error - Code 431
+	RequestHeaderFieldsTooLarge ErrorType = http.StatusRequestHeaderFieldsTooLarge
+	// UnavailableForLegalReasons error - Code 451
+	UnavailableForLegalReasons ErrorType = http.StatusUnavailableForLegalReasons
+
+	// 5xx Server errors
+	// -----------------
+	// InternalServerError error - Code 500
+	InternalServerError ErrorType = http.StatusInternalServerError
+	// NotImplemented error - Code 501
+	NotImplemented ErrorType = http.StatusNotImplemented
+	// BadGateway error - Code 502
+	BadGateway ErrorType = http.StatusBadGateway
+	// ServiceUnavailable error - Code 503
+	ServiceUnavailable ErrorType = http.StatusServiceUnavailable
+	// GatewayTimeout error - Code 504
+	GatewayTimeout ErrorType = http.StatusGatewayTimeout
+	// HTTPVersionNotSupported error - Code 505
+	HTTPVersionNotSupported ErrorType = http.StatusHTTPVersionNotSupported
+	// VariantAlsoNegotiates error - Code 506
+	VariantAlsoNegotiates ErrorType = http.StatusVariantAlsoNegotiates
+	// InsufficientStorage error - Code 507
+	InsufficientStorage ErrorType = http.StatusInsufficientStorage
+	// LoopDetected error - Code 508
+	LoopDetected ErrorType = http.StatusLoopDetected
+	// NotExtended error - Code 510
+	NotExtended ErrorType = http.StatusNotExtended
+	// NetworkAuthenticationRequired error - Code 511
+	NetworkAuthenticationRequired ErrorType = http.StatusNetworkAuthenticationRequired
 )
 
 // customError wraps an error with type and user message
