@@ -12,10 +12,11 @@ type ErrorType uint
 
 const (
 	// NoType error - Default placeholder for un-typed errors
-	NoType ErrorType = http.StatusInternalServerError
+	NoType ErrorType = iota
 
 	// 4xx Client errors
 	// -----------------
+
 	// BadRequest error - Code 400
 	BadRequest ErrorType = http.StatusBadRequest
 	// Unauthorized error - Code 401
@@ -73,6 +74,7 @@ const (
 
 	// 5xx Server errors
 	// -----------------
+
 	// InternalServerError error - Code 500
 	InternalServerError ErrorType = http.StatusInternalServerError
 	// NotImplemented error - Code 501
