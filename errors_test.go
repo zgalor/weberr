@@ -48,6 +48,7 @@ func TestGetUserMessage(t *testing.T) {
 		{NoType.UserErrorf("New User Message!"), "New User Message!"},
 		{UserWrapf(BadRequest.UserErrorf("Internal"), "External"), "External: Internal"},
 		{UserWrapf(UserWrapf(UserWrapf(io.EOF, "%d", 1), "%s", "2"), "3"), "3: 2: 1"},
+		{UserWrapf(nil, "User Wrapper"), "User Wrapper"},
 	}
 
 	for _, tt := range tests {
@@ -76,6 +77,7 @@ func TestWrapf(t *testing.T) {
 		{UserWrapf(BadRequest.Errorf("Internal"), "External"), "Internal"},
 		{Wrapf(BadRequest.UserErrorf("Internal"), "External"), "External: Internal"},
 		{Wrapf(Unauthorized.Wrapf(Wrapf(io.EOF, "%d", 1), "%s", "2"), "3"), "3: 2: 1: EOF"},
+		{Wrapf(nil, "Wrapper"), "Wrapper"},
 	}
 
 	for _, tt := range tests {

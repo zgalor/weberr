@@ -162,7 +162,7 @@ func (errorType ErrorType) Errorf(msg string, args ...interface{}) error {
 // Wrapf creates a new wrapped error with formatted message
 func (errorType ErrorType) Wrapf(err error, msg string, args ...interface{}) error {
 	if err == nil {
-		return nil
+		return errorType.Errorf(msg, args...)
 	}
 
 	c := new(customError)
@@ -181,7 +181,7 @@ func (errorType ErrorType) Wrapf(err error, msg string, args ...interface{}) err
 // UserWrapf adds a user readable to an error
 func (errorType ErrorType) UserWrapf(err error, msg string, args ...interface{}) error {
 	if err == nil {
-		return nil
+		return errorType.UserErrorf(msg, args...)
 	}
 
 	userMsg := fmt.Sprintf(msg, args...)
