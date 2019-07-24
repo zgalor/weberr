@@ -104,6 +104,7 @@ type customError struct {
 	error
 	errorType   ErrorType
 	userMessage string
+	details     []interface{}
 }
 
 // causer interface allows unwrapping an error.
@@ -151,6 +152,24 @@ func GetUserMessage(err error) string {
 	return ""
 }
 
+// errorDetailer identifies an error with details
+type errorDetailer interface {
+	Details() []interface{}
+}
+
+// Details returns the error details
+func (c *customError) Details() []interface{} { return c.details }
+
+// GetDetails returns a slice of arbitratry details for all errors
+// If error is not `errorDetailer` returns nil
+func GetDetails(err error) []interface{} {
+	if detailedError, ok := err.(errorDetailer); ok {
+		return detailedError.Details()
+	}
+
+	return nil
+}
+
 // Errorf creates a new customError with formatted message
 func (errorType ErrorType) Errorf(msg string, args ...interface{}) error {
 	return &customError{
@@ -168,6 +187,7 @@ func (errorType ErrorType) Wrapf(err error, msg string, args ...interface{}) err
 	c := new(customError)
 	c.error = errors.Wrapf(err, msg, args...)
 	c.userMessage = GetUserMessage(err)
+	c.details = GetDetails(err)
 
 	if errorType != NoType {
 		c.errorType = errorType
@@ -188,6 +208,7 @@ func (errorType ErrorType) UserWrapf(err error, msg string, args ...interface{})
 
 	c := new(customError)
 	c.error = errors.WithStack(err)
+	c.details = GetDetails(err)
 
 	origMsg := GetUserMessage(err)
 	if origMsg != "" {
@@ -202,7 +223,6 @@ func (errorType ErrorType) UserWrapf(err error, msg string, args ...interface{})
 	}
 
 	return c
-
 }
 
 // UserErrorf creates a new error with a user message
@@ -212,6 +232,40 @@ func (errorType ErrorType) UserErrorf(msg string, args ...interface{}) error {
 		error:       errors.WithStack(errors.New(message)),
 		errorType:   errorType,
 		userMessage: message,
+	}
+}
+
+// AddDetails adds a details element to an error
+func (errorType ErrorType) AddDetails(err error, details interface{}) error {
+	if details == nil {
+		return err
+	}
+
+	if err == nil {
+		return errorType.details(details)
+	}
+
+	c := new(customError)
+	c.error = errors.WithStack(err)
+	c.userMessage = GetUserMessage(err)
+
+	c.details = append(GetDetails(err), details)
+
+	if errorType != NoType {
+		c.errorType = errorType
+	} else {
+		c.errorType = GetType(err)
+	}
+
+	return c
+}
+
+// details creates a new error with arbitrary details
+func (errorType ErrorType) details(details interface{}) error {
+	return &customError{
+		error:     errors.WithStack(errors.New("")),
+		errorType: errorType,
+		details:   []interface{}{details},
 	}
 }
 
@@ -225,6 +279,7 @@ func (errorType ErrorType) Set(err error) error {
 		error:       errors.WithStack(err),
 		errorType:   errorType,
 		userMessage: GetUserMessage(err),
+		details:     GetDetails(err),
 	}
 }
 
@@ -246,6 +301,11 @@ func UserErrorf(msg string, args ...interface{}) error {
 // UserWrapf adds a user readable to an error
 func UserWrapf(err error, msg string, args ...interface{}) error {
 	return NoType.UserWrapf(err, msg, args...)
+}
+
+// AddDetails adds arbitrary details to an error
+func AddDetails(err error, details interface{}) error {
+	return NoType.AddDetails(err, details)
 }
 
 // stackTracer interface is internally defined in github.com/pkg/errors

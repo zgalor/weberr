@@ -118,3 +118,51 @@ func TestGetType(t *testing.T) {
 	}
 
 }
+
+func TestGetDetails(t *testing.T) {
+	foo := struct{ foo string }{"foo"}
+	bar := struct{ bar string }{"bar"}
+	baz := struct{ baz string }{"baz"}
+	tests := []struct {
+		err      error
+		expected []interface{}
+	}{
+		{nil, []interface{}{}},
+		{io.EOF, []interface{}{}},
+		{AddDetails(nil, foo), []interface{}{foo}},
+		{AddDetails(io.EOF, foo), []interface{}{foo}},
+		{AddDetails(AddDetails(AddDetails(nil, foo), bar), baz), []interface{}{foo, bar, baz}},
+		{AddDetails(AddDetails(AddDetails(io.EOF, foo), bar), baz), []interface{}{foo, bar, baz}},
+		{AddDetails(AddDetails(AddDetails(nil, foo), nil), baz), []interface{}{foo, baz}},
+		{AddDetails(AddDetails(AddDetails(io.EOF, foo), nil), baz), []interface{}{foo, baz}},
+		{AddDetails(NoType.UserErrorf(""), nil), []interface{}{}},
+		{AddDetails(NoType.UserErrorf(""), foo), []interface{}{foo}},
+		{AddDetails(NoType.AddDetails(NoType.UserErrorf(""), foo), nil), []interface{}{foo}},
+		{AddDetails(NoType.AddDetails(NoType.UserErrorf(""), foo), bar), []interface{}{foo, bar}},
+		{AddDetails(BadRequest.UserErrorf(""), nil), []interface{}{}},
+		{AddDetails(BadRequest.UserErrorf(""), foo), []interface{}{foo}},
+		{AddDetails(BadRequest.AddDetails(UserErrorf(""), foo), nil), []interface{}{foo}},
+		{AddDetails(BadRequest.AddDetails(UserErrorf(""), foo), bar), []interface{}{foo, bar}},
+		{AddDetails(nil, nil), []interface{}{}},
+	}
+	for _, tt := range tests {
+		got := GetDetails(tt.err)
+		if !compare(got, tt.expected) {
+			t.Errorf("got: %v, want %v", got, tt.expected)
+		}
+	}
+
+}
+
+// Helper function to compare slices
+func compare(a, b []interface{}) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}
