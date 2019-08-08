@@ -50,14 +50,27 @@ func TestGetUserMessage(t *testing.T) {
 		{UserWrapf(UserWrapf(UserWrapf(io.EOF, "%d", 1), "%s", "2"), "3"), "3: 2: 1"},
 		{UserWrapf(nil, "User Wrapper"), "User Wrapper"},
 	}
-
 	for _, tt := range tests {
 		got := GetUserMessage(tt.err)
 		if got != tt.expected {
 			t.Errorf("got: %q, want %q", got, tt.expected)
 		}
 	}
+}
 
+func TestSetUserMessage(t *testing.T) {
+	err := UserWrapf(nil, "base")
+	msg := "new-msg"
+	newErr := SetUserMessage(err, msg)
+	if GetUserMessage(newErr) != msg {
+		t.Errorf("Expected %s but got %s", msg, GetUserMessage(newErr))
+	}
+
+	msg = "even newer msg"
+	newErr = NotFound.SetUserMessage(err, msg)
+	if GetUserMessage(newErr) != msg {
+		t.Errorf("Expected %s but got %s", msg, GetUserMessage(newErr))
+	}
 }
 
 // Wrapf Test logic
