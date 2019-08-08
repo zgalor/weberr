@@ -139,7 +139,7 @@ type userMessager interface {
 	UserMessage() string
 }
 
-// UserMesage returns the user message
+// UserMessage returns the user message
 func (c *customError) UserMessage() string { return c.userMessage }
 
 // GetUserMessage returns user readable error message for all errors
@@ -152,6 +152,12 @@ func GetUserMessage(err error) string {
 	return ""
 }
 
+
+// SetUserMessage sets a user readable error message.
+func (c *customError) SetUserMessage(err error, msg string) {
+	c.userMessage = msg
+}
+
 // errorDetailer identifies an error with details
 type errorDetailer interface {
 	Details() []interface{}
@@ -160,7 +166,7 @@ type errorDetailer interface {
 // Details returns the error details
 func (c *customError) Details() []interface{} { return c.details }
 
-// GetDetails returns a slice of arbitratry details for all errors
+// GetDetails returns a slice of arbitrary details for all errors
 // If error is not `errorDetailer` returns nil
 func GetDetails(err error) []interface{} {
 	if detailedError, ok := err.(errorDetailer); ok {
