@@ -139,7 +139,7 @@ type userMessager interface {
 	UserMessage() string
 }
 
-// UserMesage returns the user message
+// UserMessage returns the user message
 func (c *customError) UserMessage() string { return c.userMessage }
 
 // GetUserMessage returns user readable error message for all errors
@@ -152,6 +152,7 @@ func GetUserMessage(err error) string {
 	return ""
 }
 
+
 // errorDetailer identifies an error with details
 type errorDetailer interface {
 	Details() []interface{}
@@ -160,7 +161,7 @@ type errorDetailer interface {
 // Details returns the error details
 func (c *customError) Details() []interface{} { return c.details }
 
-// GetDetails returns a slice of arbitratry details for all errors
+// GetDetails returns a slice of arbitrary details for all errors
 // If error is not `errorDetailer` returns nil
 func GetDetails(err error) []interface{} {
 	if detailedError, ok := err.(errorDetailer); ok {
@@ -283,6 +284,26 @@ func (errorType ErrorType) Set(err error) error {
 	}
 }
 
+func (errorType ErrorType) SetUserMessage(err error, msg string) error {
+	if err == nil {
+		return nil
+	}
+
+	var newType ErrorType
+	if errorType != NoType {
+		newType = errorType
+	} else {
+		newType = GetType(err)
+	}
+
+	return &customError{
+		error:       errors.WithStack(err),
+		errorType:   newType,
+		userMessage: msg,
+		details:     GetDetails(err),
+	}
+}
+
 // Errorf returns an error with format string
 func Errorf(msg string, args ...interface{}) error {
 	return NoType.Errorf(msg, args...)
@@ -306,6 +327,11 @@ func UserWrapf(err error, msg string, args ...interface{}) error {
 // AddDetails adds arbitrary details to an error
 func AddDetails(err error, details interface{}) error {
 	return NoType.AddDetails(err, details)
+}
+
+// SetUserMessage sets the user message to an error
+func SetUserMessage(err error, msg string) error {
+	return NoType.SetUserMessage(err, msg)
 }
 
 // stackTracer interface is internally defined in github.com/pkg/errors
@@ -341,7 +367,7 @@ func GetStackTrace(err error) string {
 	err = baseStackTracer(err)
 	x, ok := err.(stackTracer)
 	if !ok {
-		// The error doen't have a stack trace attached to it
+		// The error doesn't have a stack trace attached to it
 		return fmt.Sprintf("%+v", err)
 	}
 
