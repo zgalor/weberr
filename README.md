@@ -6,6 +6,7 @@
 Package weberr based on https://github.com/pkg/errors with a few additions:
 * Set an error type that corresponds to HTTP status returned by this error
 * Set a user friendly error message (in addition to the error message that will be logged)
+* Add arbitrary details to the error
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/zgalor/weberr)](https://goreportcard.com/report/github.com/zgalor/weberr)
 [![Build Status](https://travis-ci.org/zgalor/weberr.svg?branch=master)](https://travis-ci.org/zgalor/weberr)
