@@ -17,6 +17,10 @@ Package weberr based on https://github.com/pkg/errors with a few additions:
 
 [Read the package documentation for more information](https://godoc.org/github.com/zgalor/weberr).
 
+## Divergences from pkg/errors
+
+* We chose `weberr.Wrapf(nil, ...)` and similar wrapping functions should return a new error, whereas `errors.Wrapf(nil, ...)` historically returns nil.
+
 ## License
 
 BSD-2-Clause
