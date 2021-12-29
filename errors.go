@@ -383,3 +383,9 @@ func GetStackTrace(err error) string {
 	st := x.StackTrace()
 	return fmt.Sprintf("%+v\n", st[1:])
 }
+
+// As finds the first error in err's chain that matches target,
+// and if so, sets target to that error value and returns true. Otherwise, it returns false.
+func As(err error, target interface{}) bool {
+	return errors.As(err, target)
+}
