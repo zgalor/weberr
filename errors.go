@@ -389,3 +389,9 @@ func GetStackTrace(err error) string {
 func As(err error, target interface{}) bool {
 	return errors.As(err, target)
 }
+
+// Is finds the first error in err's chain that matches target,
+// and if so, sets target to that error value and returns true. Otherwise, it returns false.
+func Is(err error, target interface{}) bool {
+	return errors.Is(err, target)
+}
