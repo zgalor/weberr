@@ -396,3 +396,8 @@ func As(err error, target interface{}) bool {
 func Is(err error, target error) bool {
 	return goerrors.Is(err, target)
 }
+
+// Join returns an error that wraps the given errors into one.
+func Join(errs ...error) error {
+	return goerrors.Join(errs...)
+}
