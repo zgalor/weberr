@@ -120,7 +120,7 @@ type causer interface {
 func (c *customError) Cause() error { return c.error }
 
 // Unwrap error
-func (c *customError) Unwrap() error { return goerrors.Unwrap(c.error) }
+func (c *customError) Unwrap() error { return c.error }
 
 // typed interface identifies error with a type
 type typed interface {
