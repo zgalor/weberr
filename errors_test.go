@@ -1,6 +1,7 @@
 package weberr
 
 import (
+	goerrors "errors"
 	"fmt"
 	"io"
 	"testing"
@@ -165,6 +166,20 @@ func TestGetDetails(t *testing.T) {
 		}
 	}
 
+}
+
+func TestThatErrorsCanUnwrapWithGoStandardErrors(t *testing.T) {
+	parent := UserWrapf(nil, "parent error")
+	child := UserWrapf(parent, "child error")
+	if !Is(child, parent) {
+		t.Errorf("Expected to unwrap parent: '%v' with child '%v'", parent, child)
+	}
+
+	parent = goerrors.New("parent error")
+	child = fmt.Errorf("child error: %w", parent)
+	if !Is(child, parent) {
+		t.Errorf("Expected to unwrap parent: '%v' with child '%v'", parent, child)
+	}
 }
 
 // Helper function to compare slices
